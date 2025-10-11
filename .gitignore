@@ -1,0 +1,12 @@
+# Ignore Python cache
+__pycache__/
+*.pyc
+
+# Ignore virtual environments
+venv/
+
+# Ignore data folder
+/data/
+
+# Ignore all PNG files anywhere in the repo
+*.png
