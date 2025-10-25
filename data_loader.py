@@ -1,6 +1,7 @@
 import pandas as pd
 import os
 
+# Load stock data from CSV file
 def load_stock_data(file_path="data/stock_data.csv"):
 
     if not os.path.exists(file_path):

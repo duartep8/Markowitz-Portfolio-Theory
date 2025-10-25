@@ -24,6 +24,8 @@ def generate_efficient_frontier(returns, cov_matrix, mvp_weights, num_points=200
     efficient_vols = []
     efficient_returns = []
     
+    bounds = tuple((-0.08, 0.1) for _ in range(len(tickers)))
+    
     # Constraints: sum of weights = 1, and target return
     for target_return in target_returns:
         constraints = (
@@ -37,7 +39,8 @@ def generate_efficient_frontier(returns, cov_matrix, mvp_weights, num_points=200
             result = minimize(portfolio_variance, initial_weights,
                             args=(cov_matrix,),
                             method='SLSQP',
-                            constraints=constraints)
+                            constraints=constraints,
+                            bounds=bounds)  
             
             if result.success:
                 vol = standard_deviation(result.x, cov_matrix)

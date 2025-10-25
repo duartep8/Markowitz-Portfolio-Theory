@@ -40,7 +40,7 @@ The project is designed for ease of use. Instead of manual commands, you can sim
 
 ## 📈 Usage
 
-Once the setup is complete, you are ready to run the main analysis.
+Once the setup is complete, you are ready to run the main analysis. (some plots need to run the plot_functions.py directly)
 
 Execute the `main.py` script:
 ```bash

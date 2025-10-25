@@ -7,7 +7,10 @@ packages = [
     "scipy",
     "matplotlib",
     "pandas",
-    "yfinance"
+    "yfinance",
+    "seaborn",
+    "plotly",
+    "kaleido"
 ]
 
 # Install each package

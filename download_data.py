@@ -51,9 +51,9 @@ tickers = [
 
 # define start and end dates
 end_date = datetime.strptime("2025-01-01", "%Y-%m-%d")
-start_date = end_date - timedelta(days=5*365 + 2)  # 5 years
+start_date = datetime.strptime("2020-01-31", "%Y-%m-%d")
 
-data = yf.download(tickers, start= start_date, end=end_date, auto_adjust=True)
+data = yf.download(tickers, start= start_date, end=end_date, auto_adjust=True, interval="1mo")
 
 adj_close_df = data['Close']  # Extract adjusted close prices
 

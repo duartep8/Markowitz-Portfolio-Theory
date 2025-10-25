@@ -9,6 +9,7 @@ from portfolio_functions import neg_sharpe_ratio
 from download_data import tickers
 from portfolio_functions import standard_deviation, expected_returns, sharpe_ratio, portfolio_variance
 from efficient_frontier import generate_efficient_frontier
+from plot_functions import plot_portfolio_weights, prepare_portfolio_data, plot_industry_weights, plot_sector_weights
 
 def main():
     adj_close_df = load_stock_data("data/stock_data.csv")
@@ -17,6 +18,9 @@ def main():
     
     # Constraints: sum of weights = 1
     constraints = ({'type': 'eq', 'fun': lambda weights: np.sum(weights) - 1})
+
+    #Bondaries for weights: between -8% and 10%
+    bounds = tuple((-0.08, 0.1) for _ in range(len(tickers)))
     
     # Set initial weights
     initial_weights = np.array([1/len(tickers)] * len(tickers))
@@ -25,7 +29,8 @@ def main():
     optimized_results = minimize(neg_sharpe_ratio, initial_weights,
                                 args=(returns, cov_matrix),
                                 method='SLSQP',
-                                constraints=constraints)
+                                constraints=constraints,
+                                bounds=bounds)
     optimal_weights = optimized_results.x
     
     # Find MVP
@@ -33,7 +38,8 @@ def main():
                          initial_weights,
                          args=(cov_matrix,),
                          method='SLSQP',
-                         constraints=constraints)
+                         constraints=constraints,
+                         bounds=bounds)
     mvp_weights = mvp_result.x
     
     # Calculate MVP metrics
@@ -69,8 +75,8 @@ def main():
     eff_returns, eff_vols = generate_efficient_frontier(returns, cov_matrix, mvp_weights, num_points=200)
     
     # Risk-free rate
-    risk_free_rate = 0.02
-    
+    risk_free_rate = 0.0193
+
     plt.figure(figsize=(10, 7))
     
     # Plot efficient frontier
@@ -112,6 +118,12 @@ def main():
     file_path = 'efficient_frontier.png'
     print(f"Saving plot to: {file_path}")
     plt.savefig(file_path, dpi = 300, bbox_inches = 'tight')
+
+
+    plot_portfolio_weights(optimal_weights, tickers, 'optimal_weights.png')
+    portfolioo_df = prepare_portfolio_data()
+    plot_industry_weights(optimal_weights, tickers, portfolioo_df, 'industry_weights.png')
+    plot_sector_weights(optimal_weights, tickers, portfolioo_df, 'sector_weights.png')
 
 if __name__ == "__main__":
     main()
